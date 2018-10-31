@@ -11,7 +11,20 @@ import sys
 class Frame(wx.Frame):
     def __init__(self, parent, id, title):
         print 'Frame __init__'
-        wx.Frame.__init__(self, parent, id, title)
+        wx.Frame.__init__(self, parent, id, title, size=(300, 100))
+        panel = wx.Panel(self, -1)
+        button = wx.Button(panel, -1, "Close", pos=(130, 15), size=(40, 40))
+
+        # (event, handler, source=None, id=wx.ID_ANY, id2=wx.ID_ANY)
+        # source 是产生该事件的源窗口部件 在触发事件的窗口部件与用作事件处理器的窗口部件不相同时使用
+        self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)  # 1 绑定框架关闭事件
+        self.Bind(wx.EVT_BUTTON, self.OnCloseMe, button)  # 2 绑定按钮事件
+
+    def OnCloseMe(self, event):
+        self.Close(True)
+
+    def OnCloseWindow(self, event):
+        self.Destroy()
 
 
 class App(wx.App):
@@ -34,7 +47,7 @@ class App(wx.App):
         self.SetExitOnFrameDelete(False)
         wx.Exit()
 
-print '11111'
+
 if __name__ == '__main__':
     # 当在重定向开始以后到主事件结束这段时间出现print
     # redirect: False 输出到python控制台
